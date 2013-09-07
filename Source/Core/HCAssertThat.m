@@ -101,18 +101,18 @@ void HC_assertThatWithLocation(id testCase, id actual, id<HCMatcher> matcher,
          appendText:@", but "];
         [matcher describeMismatchOf:actual to:description];
         
-        NSException *assertThatFailure = createAssertThatFailure(fileName, lineNumber,
-                                                                 [description description]);
-        if ([testCase respondsToSelector:@selector(failWithException:)]) {
-            [testCase failWithException:assertThatFailure];
-        } else if ([testCase respondsToSelector:@selector(recordFailureWithDescription:inFile:atLine:expected:)]) {
-            NSNumber *n = [NSNumber numberWithInt:lineNumber];
-            [testCase recordFailureWithDescription:[description description]
-                                            inFile:[NSString stringWithUTF8String:fileName]
-                                            atLine:[n unsignedIntegerValue]
-                                          expected:NO];
-        } else {
-            [testCase unexistsMetod];
-        }
+NSException *assertThatFailure = createAssertThatFailure(fileName, lineNumber,
+                                                         [description description]);
+if ([testCase respondsToSelector:@selector(failWithException:)]) {
+    [testCase failWithException:assertThatFailure];
+} else if ([testCase respondsToSelector:@selector(recordFailureWithDescription:inFile:atLine:expected:)]) {
+    NSNumber *n = [NSNumber numberWithInt:lineNumber];
+    [testCase recordFailureWithDescription:[description description]
+                                    inFile:[NSString stringWithUTF8String:fileName]
+                                    atLine:[n unsignedIntegerValue]
+                                  expected:NO];
+} else {
+    [testCase unexistsMetod];
+}
     }
 }
